@@ -1,26 +1,27 @@
-import sys
-import os
 import warnings
 warnings.filterwarnings("ignore")
 
-
-def error_message_detail(error, error_message):
-    _, _, exc_tb = error_message.exc_info()
+def error_message_detail(error, error_detail):
+    _, _, exc_tb = error_detail.exc_info()
+    
     file_name = exc_tb.tb_frame.f_code.co_filename
     line_number = exc_tb.tb_lineno
     
-    error_detail = (f"Error Occured in file [{file_name}]"
-                    f"at line number {line_number}"
-                    f"with message {str(error)}")
-    return error_detail
+    error_message = (
+        f"Error occured in file [{file_name}]"
+        f"at line number [{line_number}]"
+        f"with message[{str(error)}]"
+    )
     
+    return error_message
+
+
 class CustomException(Exception):
-    def __init__(self, error, error_message):
+    def __init__(self, error, error_detail):
         super().__init__(error)
-        self.error_detail = error_message_detail(error, error_message)
-        
+        self.error_message  =error_message_detail(error, error_detail)
         
     def __str__(self) -> str:
-        return self.error_detail
+        return self.error_message
         
         
