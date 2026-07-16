@@ -1,0 +1,19 @@
+Step 1
+↓
+File Name
+report.pdf
+↓
+Step 2
+Extension Detect
+↓
+.pdf
+↓
+Step 3
+Loader Select
+↓
+PyPDFLoader
+↓
+Step 4
+documents = loader.load()
+↓
+Return Documents

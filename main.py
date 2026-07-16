@@ -1,23 +1,25 @@
 import sys
 from Src.exception import CustomException
-# from Src.logger import logging
+from Src.logger import logging
 from Src.documentloader import DocumentLoader
+from Src.textsplitter import TextSplitter
 
 
 def main ():
     try :
-        loader = DocumentLoader("dl-curriculum.pdf")
-        
+        loader = DocumentLoader("Data/california_housing_test.csv")
+            
         docs = loader.get_fileload()
-        if docs and len(docs) > 1:
-            print(docs[1].page_content)
+            
+        print(type(docs))
+            
         
-    
-    
-    
+        
+        
     
     except Exception as  e :
-        raise CustomException (e ,str)
+        logging.error(e)
+        raise CustomException (e ,sys)
     
     
 if __name__ == "__main__":
