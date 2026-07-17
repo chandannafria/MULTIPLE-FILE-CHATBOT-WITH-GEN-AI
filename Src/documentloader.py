@@ -14,9 +14,6 @@ from langchain_community.document_loaders import (
     Docx2txtLoader
 )
 
-
-
-
 class DocumentLoader:
 
     def __init__(self, folder_path):

@@ -3,27 +3,28 @@ from Src.logger import logging
 from Src.exception import CustomException
 from langchain_text_splitters import RecursiveCharacterTextSplitter , MarkdownTextSplitter , MarkdownHeaderTextSplitter
 from Src.config import CHUNK_SIZE , CHUNK_OVERLAP
+from Src.documentloader import DocumentLoader
 
 
 class TextSplitter:
     try:
         def  __init__(self ,
-                      file_path,
+                      
                       chunk_size=  CHUNK_SIZE, 
                       chunk_overlap=CHUNK_OVERLAP) :
             
-            self.file_path = file_path
+          
             self.chunk_size = chunk_size
             self.chunk_overlap= chunk_overlap
             
         def split_document(self, document):
             logging.info("split document creat...")
             
-            extension = os.path.splitext(self.file_path)[1].lower()
-            logging.info(f"file type {extension}")
+            file_type =document[0].metadata.get("file_type")
+            logging.info(f"file type {file_type}")
             
             # Markdown.....
-            if extension == ".md":
+            if file_type == ".md":
                 headers = [
                      ("#", "Header 1"),
 
@@ -59,7 +60,7 @@ class TextSplitter:
                 
                 for index , chunk  in enumerate(chunks):
                     chunk.metadata["chunk_id"] =index 
-                    chunk.metadata["file_type"] = extension
+                 
                     
                 logging.info(f"Total chunk {len(chunks)}")
                 
