@@ -5,6 +5,10 @@ from Src.documentloader import DocumentLoader
 from Src.textsplitter import TextSplitter
 from Src.embedding import EmbeddingModel
 from Src.vectorstore import vectorstore
+from Src.retriever import Retriever
+from Src.prompt import PromptTemplate
+from Src.model import LLM
+from Src.ragchain import RagChain
 
 def main ():
     try :
@@ -38,14 +42,19 @@ def main ():
         vector_db =vectorstore()
         db =vector_db.create_vector_store(chunks)
         
-        print(db)
+        retriever = Retriever(db)
+        search_engine = retriever.get_retriever()
+        
+        # docs =search_engine.invoke("what is LSTM")
+        rag = RagChain(search_engine)
+        chain = rag.create_chain()
+        response = chain.invoke(
+            "What is LSTM"
+        )
+        
+        print(response)
             
-        
-        
-            
-        
-        
-        
+    
     
     except Exception as  e :
         logging.error(e)
