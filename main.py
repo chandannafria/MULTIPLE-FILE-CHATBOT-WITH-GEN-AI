@@ -9,6 +9,7 @@ from Src.retriever import Retriever
 from Src.prompt import PromptTemplate
 from Src.model import LLM
 from Src.ragchain import RagChain
+from Src.memory import Memory
 
 def main ():
     try :
