@@ -11,7 +11,9 @@ from Src.prompt import PromptTemplate
 from Src.model import LLM
 from Src.ragchain import RagChain
 from Src.memory import Memory
+from dotenv import load_dotenv
 
+load_dotenv()
 
 st.set_page_config(
     page_title="Multi File ChatBot",
@@ -22,6 +24,21 @@ st.set_page_config(
 st.title("🤖 Multi File ChatBot")
 
 st.write("Upload any supported file and ask question")
+
+# user_input = st.text_input("user")
+# if user_input :
+#     with st.chat_message("user"):
+#         st.write(user_input)
+
+#     with st.spinner("Thinking..."):
+#         answer = st.session_state.chain.invoke(user_input)
+
+#     with st.chat_message("assistant"):
+#         st.write(answer)
+
+
+
+
 
 upload_file = st.file_uploader(
     "choose file",
@@ -102,40 +119,58 @@ if "chain" in st.session_state:
         with st.spinner("Thinking..."):
             answer = st.session_state.chain.invoke(question)
 
+        # with st.chat_message("assistant"):
+        #     st.write(answer)
+            
         with st.chat_message("assistant"):
-            st.write(answer)
+
+            placeholder = st.empty()
+
+            full_response = ""
+
+            for chunk in st.session_state.chain.stream(question):
+
+                full_response += chunk
+
+                placeholder.markdown(full_response)
+
+
+        st.session_state.messages.append(
+            {
+                "role": "assistant",
+                "content": full_response
+            }
+        )
             
-            
-            
-with st.sidebar:
+# with st.sidebar:
 
-    st.header("⚙ Settings")
+#     st.header("⚙ Settings")
 
-    model = st.selectbox(
-        "Model",
-        ["llama3.2", "mistral", "phi3"]
-    )
+#     model = st.selectbox(
+#         "Model",
+#         ["llama3.2", "mistral", "phi3"]
+#     )
 
-    chunk_size = st.slider(
-        "Chunk Size",
-        200,
-        2000,
-        700
-    )
+#     chunk_size = st.slider(
+#         "Chunk Size",
+#         200,
+#         2000,
+#         700
+#     )
 
-    overlap = st.slider(
-        "Chunk Overlap",
-        0,
-        500,
-        100
-    )
+#     overlap = st.slider(
+#         "Chunk Overlap",
+#         0,
+#         500,
+#         100
+#     )
 
-    top_k = st.slider(
-        "Top K",
-        1,
-        10,
-        3
-    )
+#     top_k = st.slider(
+#         "Top K",
+#         1,
+#         10,
+#         3
+#     )
 
     if st.button("🧹 Clear Chat"):
 
@@ -146,14 +181,14 @@ with st.sidebar:
         
         
         
-st.info(
-"""
-📚 LangChain
+# st.info(
+# """
+# 📚 LangChain
 
-🦙 Ollama
+# 🦙 Ollama
 
-🗂 ChromaDB
+# 🗂 ChromaDB
 
-🤗 HuggingFace Embeddings
-"""
-)
+# 🤗 HuggingFace Embeddings
+# """
+# )
